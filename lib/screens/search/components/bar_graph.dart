@@ -129,7 +129,6 @@ class BarGraph extends CustomPainter {
       thirdStick.translate(-26, 0),
       thirdStick.translate(26, height),
     );
-    print(height);
     canvas.drawRect(firstBar, paint);
     canvas.drawRect(secondBar, paint);
     canvas.drawRect(thirdBar, paint);

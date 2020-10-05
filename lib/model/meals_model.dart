@@ -12,8 +12,8 @@ class MealsModel {
 
   MealsModel({this.breakfast, this.lunch, this.dinner});
   bool get isNotEmpty =>
-      breakfast != MealsDataModel.empty &&
-      lunch != MealsDataModel.empty &&
+      breakfast != MealsDataModel.empty ||
+      lunch != MealsDataModel.empty ||
       dinner != MealsDataModel.empty;
   isEmpty(idx) {
     if (idx == 0)

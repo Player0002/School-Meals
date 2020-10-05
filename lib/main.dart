@@ -5,6 +5,7 @@ import 'package:school_food/provider/meals_provider.dart';
 import 'package:school_food/provider/school_provider.dart';
 import 'package:school_food/provider/search_provider.dart';
 import 'package:school_food/provider/swiper_provider.dart';
+import 'package:school_food/provider/user_provider.dart';
 import 'package:school_food/screens/search/school_screen.dart';
 import 'package:school_food/screens/search/search_screen.dart';
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider.value(value: UserProvider()),
         ChangeNotifierProvider.value(value: SchoolProvider()),
         ChangeNotifierProvider.value(value: SearchProvider()),
         ChangeNotifierProvider.value(value: MealsProvider()),
@@ -56,7 +58,7 @@ class MyApp extends StatelessWidget {
         home: Consumer<SchoolProvider>(
           builder: (ctx, item, _) {
             if (item.status == SchoolEnum.selecting) {
-              return Scaffold(body: Center(child: CircularProgressIndicator()));
+              return Scaffold(body: CircularProgressIndicator());
             } else if (item.status == SchoolEnum.end_selecting) {
               return SchoolScreen();
             }

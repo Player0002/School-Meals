@@ -7,6 +7,9 @@ const kAscCode = "KEY_ASC_CODE";
 const kScCode = "KEY_SC_CODE";
 const kAddress = "KEY_ADDRESS";
 
+const kGender = "KEY_GENDER";
+const kAge = "KEY_AGE";
+
 const baseUrl = "https://kyj-school-server.herokuapp.com";
 
 const textColor = Color(0xFF707070);

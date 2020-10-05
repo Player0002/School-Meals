@@ -5,10 +5,13 @@ import 'package:school_food/constants/constants.dart';
 import 'package:school_food/model/meals_model.dart';
 import 'package:school_food/model/school_model.dart';
 
-Future<MealsModel> findMeals(SchoolDataModel school) async {
+Future<MealsModel> findMeals(SchoolDataModel school, DateTime time) async {
   try {
+    print(
+        "$baseUrl/meals?AD_CODE=${school.a_sc_code}&SC_CODE=${school.sc_code}&WHEN=${time.millisecondsSinceEpoch}");
+
     final response = await http.get(
-      "$baseUrl/meals?AD_CODE=${school.a_sc_code}&SC_CODE=${school.sc_code}",
+      "$baseUrl/meals?AD_CODE=${school.a_sc_code}&SC_CODE=${school.sc_code}&WHEN=${time.millisecondsSinceEpoch}",
     );
     if (response.statusCode == 200) {
       return MealsModel.fromJson(json.decode(response.body));
@@ -16,6 +19,7 @@ Future<MealsModel> findMeals(SchoolDataModel school) async {
       return MealsModel.empty;
     }
   } on Exception {
+    print(StackTrace.current);
     throw Exception("Server connection error.");
   }
 }

@@ -1,13 +1,13 @@
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:school_food/constants/constants.dart';
 
 class AnimatedKcalGraph extends StatefulWidget {
   final double value;
   final Key key;
-  AnimatedKcalGraph({this.value, this.key}) : super(key: key);
+  final bool isAll;
+  AnimatedKcalGraph({this.value, this.key, this.isAll}) : super(key: key);
   @override
   _AnimatedKcalGraphState createState() => _AnimatedKcalGraphState();
 }
@@ -42,7 +42,8 @@ class _AnimatedKcalGraphState extends State<AnimatedKcalGraph>
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      painter: KcalGrpah(fraction: fraction, value: widget.value),
+      painter: KcalGrpah(
+          fraction: fraction, value: widget.value, isAll: widget.isAll),
     );
   }
 }
@@ -50,19 +51,21 @@ class _AnimatedKcalGraphState extends State<AnimatedKcalGraph>
 class KcalGrpah extends CustomPainter {
   final double value;
   final double fraction;
-  KcalGrpah({this.value, this.fraction});
+  final bool isAll;
+  KcalGrpah({this.value, this.fraction, this.isAll});
   double rad(double angle) => pi / 180 * angle;
 
   @override
   void paint(Canvas canvas, Size size) {
-    Gradient grad = LinearGradient(
-        colors: [Colors.white, Colors.blueAccent], stops: [0.2, 0.8]);
     Paint paint = Paint()
       ..color = Color(0xFF8DA6D8)
       ..strokeWidth = 3
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.square;
-    double ang = value / 2400 * 360;
+    double calculated = (value / 2400.0) * 360;
+    double ang = calculated > 360 ? 360 : calculated;
+    double overAngle = calculated - 360;
+    bool isOver = calculated > 360;
     Offset center = Offset(size.width / 2, size.height / 2);
     double radius = min(size.width / 2 - paint.strokeWidth / 2,
         size.height / 2 - paint.strokeWidth / 2);
@@ -76,10 +79,33 @@ class KcalGrpah extends CustomPainter {
         rad(-90),
         rad(ang * fraction),
       );
+    Path overedP = Path()
+      ..addArc(
+        Rect.fromCircle(center: center, radius: radius),
+        rad(-90),
+        rad(overAngle * fraction),
+      );
     canvas.drawPath(p, paint);
     paint..strokeWidth = 8;
     paint..color = Color(0xFF4B75F2);
     canvas.drawPath(p, paint);
+
+    if (isOver) {
+      Gradient grad = LinearGradient(
+        colors: [
+          Color(0xFF8B75F2),
+          Color(0xFFFF75F2),
+        ],
+        stops: [0.2, 0.6],
+        end: Alignment.bottomCenter,
+        begin: Alignment.topCenter,
+      );
+      paint
+        ..shader =
+            grad.createShader(Rect.fromCircle(center: center, radius: radius));
+      canvas.drawPath(overedP, paint);
+    }
+    paint..shader = null;
     drawText(canvas, size, "${value.toInt()}\n");
   }
 
@@ -94,7 +120,16 @@ class KcalGrpah extends CustomPainter {
               fontSize: 24,
               color: Color(0xFFBFBFBF),
               fontWeight: FontWeight.w300),
-          text: "Kcal",
+          text: "Kcal\n",
+          children: [
+            TextSpan(
+              text: isAll ? "전체 칼로리 입니다." : "개별 칼로리 입니다.",
+              style: defaultFont.copyWith(
+                color: Color(0xFFBFBFBF),
+                fontSize: 12,
+              ),
+            )
+          ],
         ),
       ],
     );

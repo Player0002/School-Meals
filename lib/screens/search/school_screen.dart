@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:provider/provider.dart';
 import 'package:school_food/constants/constants.dart';
@@ -8,18 +9,20 @@ import 'package:school_food/provider/swiper_provider.dart';
 import 'package:school_food/screens/search/components/graph.dart';
 import 'package:school_food/screens/search/information_screen.dart';
 import 'package:school_food/screens/search/search_screen.dart';
+import 'package:school_food/screens/search/setting_screen.dart';
 import 'package:school_food/services/sizeconfig.dart';
 
 class SchoolScreen extends StatelessWidget {
+  final weeks = ['월', '화', '수', '목', '금', '토', "일"];
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     final titles = ["아침", "점심", "저녁"];
     final swiper_provider = Provider.of<SwiperProvider>(context, listen: false);
     final provider = Provider.of<SchoolProvider>(context, listen: false);
+    final meal = Provider.of<MealsProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<MealsProvider>(context, listen: false)
-          .loadingFood(provider.selectedSchool);
+      meal.loadingFood(provider.selectedSchool);
     });
     return Scaffold(
       appBar: AppBar(
@@ -28,6 +31,41 @@ class SchoolScreen extends StatelessWidget {
               context, MaterialPageRoute(builder: (ctx) => SearchScreen())),
           child: Icon(Icons.arrow_back_ios),
         ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              final now = DateTime.now();
+              DatePicker.showDatePicker(
+                context,
+                locale: LocaleType.ko,
+                onConfirm: (date) {
+                  meal.time = date;
+                  meal.loadingFood(provider.selectedSchool);
+                },
+                currentTime: meal.time,
+                minTime: DateTime(now.year, 1, 1),
+                maxTime: DateTime(now.year, now.month,
+                    DateTime(now.year, now.month + 1, 0).day),
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Icon(Icons.calendar_today),
+            ),
+          )
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (ctx) => SettingScreen(),
+            ),
+          );
+        },
+        child: Icon(Icons.settings),
+        backgroundColor: Colors.blueAccent,
       ),
       body: SingleChildScrollView(
         child: SizedBox(
@@ -37,7 +75,7 @@ class SchoolScreen extends StatelessWidget {
             children: [
               Padding(
                 padding: EdgeInsets.only(
-                  bottom: getProportionateScreenHeight(40),
+                  bottom: getProportionateScreenHeight(20),
                 ),
                 child: Text(
                   "${provider.selectedSchool.school_name}",
@@ -45,30 +83,59 @@ class SchoolScreen extends StatelessWidget {
                   style: defaultFont.copyWith(fontSize: 24),
                 ),
               ),
+              Padding(
+                padding:
+                    EdgeInsets.only(bottom: getProportionateScreenHeight(20)),
+                child: Consumer<MealsProvider>(
+                  builder: (ctx, item, _) => Text(
+                    "${item.time.year}년 ${item.time.month}월 ${item.time.day}일 [ ${weeks[item.time.weekday - 1]} ]",
+                    style: defaultFont,
+                  ),
+                ),
+              ),
               SizedBox(
                 width: getProportionateScreenWidth(200),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Consumer<MealsProvider>(
-                    builder: (ctx, i, _) {
-                      if (i.status == MealsEnum.food_searching)
-                        return CircularProgressIndicator();
-                      if (i.status == MealsEnum.error_food_searching)
-                        return Text("급식을 찾을 수 가 없습니다.");
-                      return Consumer<SwiperProvider>(
-                        builder: (ctx, item, _) {
-                          double value = 0;
-                          final meal = i.meals.getFromIdx(item.index);
-                          if (!i.meals.isEmpty(item.index))
-                            value = double.parse(i.meals
-                                .getFromIdx(item.index)
-                                .cal
-                                .replaceAll(" Kcal", ""));
-                          return AnimatedKcalGraph(
-                              key: UniqueKey(), value: value);
-                        },
-                      );
-                    },
+                child: GestureDetector(
+                  onTap: () {
+                    final swi =
+                        Provider.of<SwiperProvider>(context, listen: false);
+                    swi.isShowAll = !swi.isShowAll;
+                  },
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: Consumer<MealsProvider>(
+                      builder: (ctx, i, _) {
+                        if (i.status == MealsEnum.food_searching)
+                          return CircularProgressIndicator();
+                        if (i.status == MealsEnum.error_food_searching)
+                          return Center(child: Text("급식을 찾을 수 가 없습니다."));
+                        return Consumer<SwiperProvider>(
+                          builder: (ctx, item, _) {
+                            double value = 0;
+                            if (!i.meals.isEmpty(item.index))
+                              value = double.parse(i.meals
+                                  .getFromIdx(item.index)
+                                  .cal
+                                  .replaceAll(" Kcal", ""));
+                            if (item.isShowAll) {
+                              value = 0;
+                              for (int idx = 0; idx < 3; idx++) {
+                                if (!i.meals.isEmpty(idx))
+                                  value += double.parse(i.meals
+                                      .getFromIdx(idx)
+                                      .cal
+                                      .replaceAll(" Kcal", ""));
+                              }
+                            }
+                            return AnimatedKcalGraph(
+                              isAll: item.isShowAll,
+                              key: item.isShowAll ? null : UniqueKey(),
+                              value: value,
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -102,7 +169,7 @@ class SchoolScreen extends StatelessWidget {
                         child: CircularProgressIndicator(),
                       );
                     } else if (item.status == MealsEnum.error_food_searching) {
-                      return Text("No data found...");
+                      return Center(child: Text("급식을 찾을 수 가 없습니다."));
                     }
                     return Swiper(
                       viewportFraction: 0.6,
