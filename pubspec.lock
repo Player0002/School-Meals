@@ -78,6 +78,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  ffi:
+    dependency: transitive
+    description:
+      name: ffi
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.3"
   file:
     dependency: transitive
     description:
@@ -142,13 +149,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.4"
-  infinite_listview:
-    dependency: transitive
-    description:
-      name: infinite_listview
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1+1"
   intl:
     dependency: transitive
     description:
@@ -177,13 +177,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.4"
-  numberpicker:
-    dependency: "direct main"
-    description:
-      name: numberpicker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.1"
   path:
     dependency: transitive
     description:
@@ -197,7 +190,7 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.14"
+    version: "1.6.18"
   path_provider_linux:
     dependency: transitive
     description:
@@ -211,7 +204,7 @@ packages:
       name: path_provider_macos
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.4+3"
+    version: "0.0.4+4"
   path_provider_platform_interface:
     dependency: transitive
     description:
@@ -219,6 +212,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  path_provider_windows:
+    dependency: transitive
+    description:
+      name: path_provider_windows
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4+1"
   pedantic:
     dependency: transitive
     description:
@@ -239,7 +239,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.2"
+    version: "1.0.3"
   process:
     dependency: transitive
     description:
@@ -254,13 +254,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.3.2+2"
+  scroll_snap_list:
+    dependency: "direct main"
+    description:
+      name: scroll_snap_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.1"
   shared_preferences:
     dependency: "direct main"
     description:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.10"
+    version: "0.5.12"
   shared_preferences_linux:
     dependency: transitive
     description:
@@ -289,6 +296,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2+7"
+  shared_preferences_windows:
+    dependency: transitive
+    description:
+      name: shared_preferences_windows
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1+1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -357,6 +371,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.8"
+  win32:
+    dependency: transitive
+    description:
+      name: win32
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.7.3"
   xdg_directories:
     dependency: transitive
     description:

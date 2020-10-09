@@ -6,6 +6,7 @@ import 'package:school_food/constants/constants.dart';
 import 'package:school_food/provider/meals_provider.dart';
 import 'package:school_food/provider/school_provider.dart';
 import 'package:school_food/provider/swiper_provider.dart';
+import 'package:school_food/provider/user_provider.dart';
 import 'package:school_food/screens/search/components/graph.dart';
 import 'package:school_food/screens/search/information_screen.dart';
 import 'package:school_food/screens/search/search_screen.dart';
@@ -21,6 +22,8 @@ class SchoolScreen extends StatelessWidget {
     final swiper_provider = Provider.of<SwiperProvider>(context, listen: false);
     final provider = Provider.of<SchoolProvider>(context, listen: false);
     final meal = Provider.of<MealsProvider>(context, listen: false);
+    final userOption = Provider.of<UserProvider>(context, listen: false);
+
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       meal.loadingFood(provider.selectedSchool);
     });
@@ -178,6 +181,17 @@ class SchoolScreen extends StatelessWidget {
                       index: swiper_provider.index,
                       onIndexChanged: (index) {
                         swiper_provider.index = index;
+                        if (!userOption.useSwiperNextDay) return;
+                        int vaild = swiper_provider.index -
+                            swiper_provider.previousIndex;
+                        if ((vaild).abs() == 2) {
+                          if (vaild < 0) {
+                            // When go Breakfast to dinner
+                          }
+                          if (vaild > 0) {
+                            // When go dinner to breakfast
+                          }
+                        }
                       },
                       itemBuilder: (ctx, idx) {
                         return Container(

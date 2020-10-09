@@ -7,6 +7,9 @@ enum UserStatus { UPDATED, NO_UPDATED, UPDATING }
 
 class UserProvider extends ChangeNotifier {
   int _age = 17;
+
+  bool _useSwiperNextDay = false;
+
   Gender gender = Gender.MAN;
   UserStatus _status = UserStatus.NO_UPDATED;
   UserStatus get status => _status;
@@ -16,6 +19,10 @@ class UserProvider extends ChangeNotifier {
   }
 
   int get age => _age;
+  bool get useSwiperNextDay => _useSwiperNextDay;
+
+  void toggleSwiperNextDay() => _useSwiperNextDay = !_useSwiperNextDay;
+
   set age(val) {
     _age = val;
     notifyListeners();

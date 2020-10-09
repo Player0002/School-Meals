@@ -159,6 +159,7 @@ class SearchBox extends StatelessWidget {
                           hintText: "여기에 학교이름을 입력하세요.",
                           hintStyle: defaultFont,
                         ),
+                        onSubmitted: (text) => {onPress()},
                       ),
                     ),
                     Material(
