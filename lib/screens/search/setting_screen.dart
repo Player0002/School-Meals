@@ -14,6 +14,7 @@ class SettingScreen extends StatelessWidget {
       //print(scrollController.offset);
     });
     SizeConfig().init(context);
+    final userOption = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(),
       body: SafeArea(
@@ -115,10 +116,77 @@ class SettingScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                ),
+                Divider(),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: getProportionateScreenHeight(20),
+                    horizontal: getProportionateScreenWidth(20),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "슬라이드로 날짜 변경",
+                        style: defaultFont.copyWith(fontSize: 16),
+                      ),
+                      CustomTabs(
+                        initialIndex: userOption.useSwiperNextDay ? 0 : 1,
+                        onPress: (newIdx) {
+                          userOption.useSwiperNextDay = newIdx == 0;
+                        },
+                      )
+                    ],
+                  ),
                 )
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomTabs extends StatelessWidget {
+  final ValueChanged<int> onPress;
+  final int initialIndex;
+  const CustomTabs({
+    Key key,
+    @required this.initialIndex,
+    @required this.onPress,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: SizeConfig.screenWidth * 0.4,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.grey.withOpacity(0.5),
+      ),
+      child: DefaultTabController(
+        initialIndex: initialIndex,
+        length: 2,
+        child: TabBar(
+          labelPadding: EdgeInsets.symmetric(
+            horizontal: getProportionateScreenWidth(10),
+          ),
+          indicator: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white.withOpacity(0.5),
+          ),
+          labelStyle: defaultFont,
+          labelColor: textColor,
+          onTap: onPress,
+          tabs: [
+            Tab(
+              text: "활성화",
+            ),
+            Tab(
+              text: "비활성화",
+            ),
+          ],
         ),
       ),
     );

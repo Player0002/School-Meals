@@ -185,12 +185,16 @@ class SchoolScreen extends StatelessWidget {
                         int vaild = swiper_provider.index -
                             swiper_provider.previousIndex;
                         if ((vaild).abs() == 2) {
-                          if (vaild < 0) {
-                            // When go Breakfast to dinner
-                          }
                           if (vaild > 0) {
-                            // When go dinner to breakfast
+                            // When go Breakfast to dinner, I should subtract 1 days.
+                            meal.time = meal.time.subtract(Duration(days: 1));
                           }
+                          if (vaild < 0) {
+                            // When go dinner to breakfast, I should add 1 days.
+                            meal.time = meal.time.add(Duration(days: 1));
+                          }
+                          //and update foods
+                          meal.loadingFood(provider.selectedSchool);
                         }
                       },
                       itemBuilder: (ctx, idx) {

@@ -21,7 +21,10 @@ class UserProvider extends ChangeNotifier {
   int get age => _age;
   bool get useSwiperNextDay => _useSwiperNextDay;
 
-  void toggleSwiperNextDay() => _useSwiperNextDay = !_useSwiperNextDay;
+  set useSwiperNextDay(val) {
+    _useSwiperNextDay = val;
+    notifyListeners();
+  }
 
   set age(val) {
     _age = val;
