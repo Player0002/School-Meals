@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: SwiperProvider()),
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: '학교 급식',
         debugShowCheckedModeBanner: false,
         theme: ThemeData.light().copyWith(
           primaryColor: Color(0xFFFAFAFA),
