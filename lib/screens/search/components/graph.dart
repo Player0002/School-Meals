@@ -9,9 +9,9 @@ class AnimatedKcalGraph extends StatefulWidget {
   final Key key;
   final bool isAll;
   final Gender humanGender;
-  final double humanHeight;
+  final double humanAge;
   AnimatedKcalGraph(
-      {this.value, this.key, this.isAll, this.humanGender, this.humanHeight})
+      {this.value, this.key, this.isAll, this.humanGender, this.humanAge})
       : super(key: key);
   @override
   _AnimatedKcalGraphState createState() => _AnimatedKcalGraphState();
@@ -44,19 +44,58 @@ class _AnimatedKcalGraphState extends State<AnimatedKcalGraph>
     super.initState();
   }
 
-  double get generalWeight => (widget.humanGender == Gender.MAN
-      ? (widget.humanHeight / 100) * (widget.humanHeight / 100) * 22
-      : (widget.humanHeight / 100) * (widget.humanHeight / 100) * 21);
+  int getCal() {
+    if (widget.humanAge <= 2)
+      return 1000;
+    else if (widget.humanAge <= 5)
+      return 1400;
+    else {
+      if (widget.humanGender == Gender.MAN) {
+        if (widget.humanAge <= 8)
+          return 1700;
+        else if (widget.humanAge <= 11)
+          return 2100;
+        else if (widget.humanAge <= 14)
+          return 2500;
+        else if (widget.humanAge <= 18)
+          return 2700;
+        else if (widget.humanAge <= 29)
+          return 2600;
+        else if (widget.humanAge <= 49)
+          return 2400;
+        else if (widget.humanAge <= 64)
+          return 2200;
+        else
+          return 2000;
+      } else {
+        if (widget.humanAge <= 8)
+          return 1500;
+        else if (widget.humanAge <= 11)
+          return 1800;
+        else if (widget.humanAge <= 14)
+          return 2000;
+        else if (widget.humanAge <= 18)
+          return 2000;
+        else if (widget.humanAge <= 29)
+          return 2100;
+        else if (widget.humanAge <= 49)
+          return 1900;
+        else if (widget.humanAge <= 64)
+          return 1800;
+        else
+          return 1600;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(generalWeight);
     return CustomPaint(
       painter: KcalGrpah(
           fraction: fraction,
           value: widget.value,
           isAll: widget.isAll,
-          maxCal: (generalWeight * 30)),
+          maxCal: getCal().toDouble()),
     );
   }
 }
@@ -137,7 +176,7 @@ class KcalGrpah extends CustomPainter {
           text: "Kcal\n",
           children: [
             TextSpan(
-              text: maxCal.toString(), //isAll ? "전체 칼로리 입니다." : "개별 칼로리 입니다.",
+              text: isAll ? "전체 칼로리 입니다." : "개별 칼로리 입니다.",
               style: defaultFont.copyWith(
                 color: Color(0xFFBFBFBF),
                 fontSize: 12,

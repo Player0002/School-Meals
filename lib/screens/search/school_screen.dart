@@ -39,18 +39,33 @@ class SchoolScreen extends StatelessWidget {
           GestureDetector(
             onTap: () {
               final now = DateTime.now();
-              DatePicker.showDatePicker(
-                context,
-                locale: LocaleType.ko,
-                onConfirm: (date) {
-                  meal.time = date;
+
+              if (userOption.useMaterialDay) {
+                showDatePicker(
+                  context: context,
+                  initialDate: now,
+                  firstDate: DateTime(now.year, 1, 1),
+                  lastDate: DateTime(now.year, now.month,
+                      DateTime(now.year, now.month + 1, 0).day),
+                ).then((value) {
+                  if (value == null) return;
+                  meal.time = value;
                   meal.loadingFood(provider.selectedSchool, 0, 0);
-                },
-                currentTime: meal.time,
-                minTime: DateTime(now.year, 1, 1),
-                maxTime: DateTime(now.year, now.month,
-                    DateTime(now.year, now.month + 1, 0).day),
-              );
+                });
+              } else {
+                DatePicker.showDatePicker(
+                  context,
+                  locale: LocaleType.ko,
+                  onConfirm: (date) {
+                    meal.time = date;
+                    meal.loadingFood(provider.selectedSchool, 0, 0);
+                  },
+                  currentTime: meal.time,
+                  minTime: DateTime(now.year, 1, 1),
+                  maxTime: DateTime(now.year, now.month,
+                      DateTime(now.year, now.month + 1, 0).day),
+                );
+              }
             },
             child: Padding(
               padding: EdgeInsets.all(20),
@@ -135,7 +150,7 @@ class SchoolScreen extends StatelessWidget {
                               isAll: item.isShowAll,
                               key: item.isShowAll ? null : UniqueKey(),
                               value: value,
-                              humanHeight: userOption.height.toDouble(),
+                              humanAge: userOption.age.toDouble(),
                               humanGender: userOption.gender,
                             );
                           },

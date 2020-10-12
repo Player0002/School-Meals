@@ -58,7 +58,6 @@ class InformationScreen extends StatelessWidget {
                             meal: meal,
                             humanAge: userOption.age,
                             humanGender: userOption.gender,
-                            humanHeight: userOption.height.toDouble(),
                           ),
                         ),
                         Padding(

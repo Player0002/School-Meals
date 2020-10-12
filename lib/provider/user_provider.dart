@@ -7,20 +7,25 @@ enum UserStatus { UPDATED, NO_UPDATED, UPDATING }
 
 class UserProvider extends ChangeNotifier {
   int _age = 17;
-  int _height = 176;
-
+  bool _useMaterialDay = false;
   bool _useSwiperNextDay = false;
 
   Gender _gender = Gender.MAN;
   UserStatus _status = UserStatus.NO_UPDATED;
   UserStatus get status => _status;
+  bool get useMaterialDay => _useMaterialDay;
+
+  set useMaterialDay(val) {
+    _useMaterialDay = val;
+    notifyListeners();
+  }
+
   set status(val) {
     _status = val;
     notifyListeners();
   }
 
   Gender get gender => _gender;
-  int get height => _height;
   int get age => _age;
   bool get useSwiperNextDay => _useSwiperNextDay;
 
@@ -39,11 +44,6 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  set height(val) {
-    _height = val;
-    notifyListeners();
-  }
-
   UserProvider() {
     loadingData();
   }
@@ -59,8 +59,9 @@ class UserProvider extends ChangeNotifier {
     if (pref.getBool(kUseSwiper) != useSwiperNextDay) {
       pref.setBool(kUseSwiper, useSwiperNextDay);
     }
-    if (height != null) {
-      pref.setInt(kHeight, height);
+
+    if (pref.getBool(kUseMaterial) != useMaterialDay) {
+      pref.setBool(kUseMaterial, useMaterialDay);
     }
     notifyListeners();
   }
@@ -71,18 +72,17 @@ class UserProvider extends ChangeNotifier {
     if (pref.containsKey(kAge) &&
         pref.containsKey(kGender) &&
         pref.containsKey(kUseSwiper) &&
-        pref.containsKey(kHeight)) {
+        pref.containsKey(kUseMaterial)) {
       _age = pref.get(kAge);
       _useSwiperNextDay = pref.getBool(kUseSwiper);
       _gender = pref.getInt(kGender) == 1 ? Gender.MAN : Gender.WOMAN;
-      _height = pref.getInt(kHeight);
+      _useMaterialDay = pref.getBool(kUseMaterial);
       status = UserStatus.UPDATED;
       return;
     }
     pref.setInt(kAge, 17);
     pref.setInt(kGender, 1);
     pref.setBool(kUseSwiper, false);
-    pref.setInt(kHeight, 176);
     status = UserStatus.UPDATED;
   }
 }

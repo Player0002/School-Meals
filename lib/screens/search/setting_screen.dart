@@ -142,48 +142,6 @@ class SettingScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: getProportionateScreenHeight(10),
-                    horizontal: getProportionateScreenWidth(20),
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: getProportionateScreenHeight(10)),
-                        child: Text("키",
-                            style: defaultFont.copyWith(fontSize: 24)),
-                      ),
-                      Container(
-                        width: double.infinity,
-                        height: getProportionateScreenHeight(60),
-                        child: ScrollSnapList(
-                          itemBuilder: (ctx, idx) => Container(
-                            width: 75,
-                            child: Center(
-                              child: Text(
-                                "$idx",
-                                style: idx == item.height
-                                    ? defaultFont.copyWith(fontSize: 24)
-                                    : defaultFont,
-                              ),
-                            ),
-                          ),
-                          itemCount: 200,
-                          initialIndex: item.height.toDouble(),
-                          scrollDirection: Axis.horizontal,
-                          dynamicItemSize: true,
-                          onItemFocus: (idx) async {
-                            item.height = idx;
-                            await item.saveData();
-                          },
-                          itemSize: 75,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 Divider(),
                 Padding(
                   padding: EdgeInsets.symmetric(
@@ -201,6 +159,30 @@ class SettingScreen extends StatelessWidget {
                         initialIndex: userOption.useSwiperNextDay ? 0 : 1,
                         onPress: (newIdx) {
                           userOption.useSwiperNextDay = newIdx == 0;
+                          userOption.saveData();
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: getProportionateScreenHeight(20),
+                    horizontal: getProportionateScreenWidth(20),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "날짜 선택 방법",
+                        style: defaultFont.copyWith(fontSize: 16),
+                      ),
+                      CustomTabs(
+                        first: "달력",
+                        seconds: "스크롤",
+                        initialIndex: userOption.useMaterialDay ? 0 : 1,
+                        onPress: (newIdx) {
+                          userOption.useMaterialDay = newIdx == 0;
                           userOption.saveData();
                         },
                       )
@@ -227,10 +209,14 @@ class SettingScreen extends StatelessWidget {
 class CustomTabs extends StatelessWidget {
   final ValueChanged<int> onPress;
   final int initialIndex;
+  final String first;
+  final String seconds;
   const CustomTabs({
     Key key,
     @required this.initialIndex,
     @required this.onPress,
+    this.first,
+    this.seconds,
   }) : super(key: key);
 
   @override
@@ -257,10 +243,10 @@ class CustomTabs extends StatelessWidget {
           onTap: onPress,
           tabs: [
             Tab(
-              text: "활성화",
+              text: first ?? "활성화",
             ),
             Tab(
-              text: "비활성화",
+              text: seconds ?? "비활성화",
             ),
           ],
         ),

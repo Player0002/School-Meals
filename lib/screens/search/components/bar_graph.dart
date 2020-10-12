@@ -8,19 +8,13 @@ import 'package:school_food/model/meals_model.dart';
 import 'package:school_food/provider/user_provider.dart';
 
 class BarGraphImage extends StatefulWidget {
-  final double humanHeight;
   final int humanAge;
   final Gender humanGender;
   final double height;
   final Key key;
   final MealsDataModel meal;
   BarGraphImage(
-      {this.humanHeight,
-      this.humanAge,
-      this.humanGender,
-      this.height,
-      this.key,
-      this.meal})
+      {this.humanAge, this.humanGender, this.height, this.key, this.meal})
       : super(key: key);
   @override
   _BarGraphImageState createState() => _BarGraphImageState();
@@ -32,10 +26,6 @@ class _BarGraphImageState extends State<BarGraphImage>
   ui.Image image2;
   ui.Image image3;
   double tan = 2600, dan = 20, gi = 31;
-
-  double get generalWeight => (widget.humanGender == Gender.MAN
-      ? (widget.humanHeight / 100) * (widget.humanHeight / 100) * 22
-      : (widget.humanHeight / 100) * (widget.humanHeight / 100) * 21);
 
   double fraction = 0;
   Animation<double> animation;
@@ -118,6 +108,50 @@ class _BarGraphImageState extends State<BarGraphImage>
     }
   }
 
+  int getCal() {
+    if (widget.humanAge <= 2)
+      return 1000;
+    else if (widget.humanAge <= 5)
+      return 1400;
+    else {
+      if (widget.humanGender == Gender.MAN) {
+        if (widget.humanAge <= 8)
+          return 1700;
+        else if (widget.humanAge <= 11)
+          return 2100;
+        else if (widget.humanAge <= 14)
+          return 2500;
+        else if (widget.humanAge <= 18)
+          return 2700;
+        else if (widget.humanAge <= 29)
+          return 2600;
+        else if (widget.humanAge <= 49)
+          return 2400;
+        else if (widget.humanAge <= 64)
+          return 2200;
+        else
+          return 2000;
+      } else {
+        if (widget.humanAge <= 8)
+          return 1500;
+        else if (widget.humanAge <= 11)
+          return 1800;
+        else if (widget.humanAge <= 14)
+          return 2000;
+        else if (widget.humanAge <= 18)
+          return 2000;
+        else if (widget.humanAge <= 29)
+          return 2100;
+        else if (widget.humanAge <= 49)
+          return 1900;
+        else if (widget.humanAge <= 64)
+          return 1800;
+        else
+          return 1600;
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
@@ -128,7 +162,7 @@ class _BarGraphImageState extends State<BarGraphImage>
           tan: tan,
           dan: dan,
           gi: gi,
-          maxTan: (((generalWeight * 30) / 4) * 0.5),
+          maxTan: ((getCal() / 4) * 0.5),
           maxGi: (widget.humanAge <= 2 ? 35 : 30),
           maxDan: getDan(),
           height: widget.height,
