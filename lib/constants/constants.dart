@@ -9,6 +9,8 @@ const kAddress = "KEY_ADDRESS";
 
 const kGender = "KEY_GENDER";
 const kAge = "KEY_AGE";
+const kUseSwiper = "KEY_USE_SWIPER";
+const kHeight = "KEY_HEIGHT";
 
 const baseUrl = "https://kyj-school-server.herokuapp.com";
 

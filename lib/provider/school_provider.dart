@@ -29,7 +29,7 @@ class SchoolProvider extends ChangeNotifier {
     pref.setString(kSchoolName, model.school_name);
     pref.setString(kScCode, model.sc_code);
     pref.setString(kAscCode, model.a_sc_code);
-    pref.setString(kAddress, model.address);
+    //pref.setString(kAddress, model.address); // not required.
     status = SchoolEnum.end_selecting;
   }
 
@@ -37,13 +37,12 @@ class SchoolProvider extends ChangeNotifier {
     status = SchoolEnum.selecting;
     SharedPreferences pref = await SharedPreferences.getInstance();
     bool usable = pref.containsKey(kSchoolName) &&
-        pref.containsKey(kAddress) &&
         pref.containsKey(kAscCode) &&
         pref.containsKey(kScCode);
     if (usable) {
       selectedSchool = SchoolDataModel(
           school_name: pref.getString(kSchoolName),
-          address: pref.getString(kAddress),
+          address: "It is not enabled.",
           a_sc_code: pref.getString(kAscCode),
           sc_code: pref.getString(kScCode));
       status = SchoolEnum.end_selecting;

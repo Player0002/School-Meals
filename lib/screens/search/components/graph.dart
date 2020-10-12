@@ -2,12 +2,17 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:school_food/constants/constants.dart';
+import 'package:school_food/provider/user_provider.dart';
 
 class AnimatedKcalGraph extends StatefulWidget {
   final double value;
   final Key key;
   final bool isAll;
-  AnimatedKcalGraph({this.value, this.key, this.isAll}) : super(key: key);
+  final Gender humanGender;
+  final double humanHeight;
+  AnimatedKcalGraph(
+      {this.value, this.key, this.isAll, this.humanGender, this.humanHeight})
+      : super(key: key);
   @override
   _AnimatedKcalGraphState createState() => _AnimatedKcalGraphState();
 }
@@ -39,11 +44,19 @@ class _AnimatedKcalGraphState extends State<AnimatedKcalGraph>
     super.initState();
   }
 
+  double get generalWeight => (widget.humanGender == Gender.MAN
+      ? (widget.humanHeight / 100) * (widget.humanHeight / 100) * 22
+      : (widget.humanHeight / 100) * (widget.humanHeight / 100) * 21);
+
   @override
   Widget build(BuildContext context) {
+    print(generalWeight);
     return CustomPaint(
       painter: KcalGrpah(
-          fraction: fraction, value: widget.value, isAll: widget.isAll),
+          fraction: fraction,
+          value: widget.value,
+          isAll: widget.isAll,
+          maxCal: (generalWeight * 30)),
     );
   }
 }
@@ -52,7 +65,8 @@ class KcalGrpah extends CustomPainter {
   final double value;
   final double fraction;
   final bool isAll;
-  KcalGrpah({this.value, this.fraction, this.isAll});
+  final double maxCal;
+  KcalGrpah({this.value, this.fraction, this.isAll, this.maxCal});
   double rad(double angle) => pi / 180 * angle;
 
   @override
@@ -62,7 +76,7 @@ class KcalGrpah extends CustomPainter {
       ..strokeWidth = 3
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.square;
-    double calculated = (value / 2400.0) * 360;
+    double calculated = (value / maxCal) * 360;
     double ang = calculated > 360 ? 360 : calculated;
     double overAngle = calculated - 360;
     bool isOver = calculated > 360;
@@ -123,7 +137,7 @@ class KcalGrpah extends CustomPainter {
           text: "Kcal\n",
           children: [
             TextSpan(
-              text: isAll ? "전체 칼로리 입니다." : "개별 칼로리 입니다.",
+              text: maxCal.toString(), //isAll ? "전체 칼로리 입니다." : "개별 칼로리 입니다.",
               style: defaultFont.copyWith(
                 color: Color(0xFFBFBFBF),
                 fontSize: 12,

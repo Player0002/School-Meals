@@ -15,6 +15,7 @@ import 'package:school_food/services/sizeconfig.dart';
 
 class SchoolScreen extends StatelessWidget {
   final weeks = ['월', '화', '수', '목', '금', '토', "일"];
+  int right = 0, left = 0;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -25,7 +26,7 @@ class SchoolScreen extends StatelessWidget {
     final userOption = Provider.of<UserProvider>(context, listen: false);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      meal.loadingFood(provider.selectedSchool);
+      meal.loadingFood(provider.selectedSchool, 0, 0);
     });
     return Scaffold(
       appBar: AppBar(
@@ -43,7 +44,7 @@ class SchoolScreen extends StatelessWidget {
                 locale: LocaleType.ko,
                 onConfirm: (date) {
                   meal.time = date;
-                  meal.loadingFood(provider.selectedSchool);
+                  meal.loadingFood(provider.selectedSchool, 0, 0);
                 },
                 currentTime: meal.time,
                 minTime: DateTime(now.year, 1, 1),
@@ -65,7 +66,7 @@ class SchoolScreen extends StatelessWidget {
             MaterialPageRoute(
               builder: (ctx) => SettingScreen(),
             ),
-          );
+          ).then((value) => userOption.saveData());
         },
         child: Icon(Icons.settings),
         backgroundColor: Colors.blueAccent,
@@ -112,8 +113,8 @@ class SchoolScreen extends StatelessWidget {
                           return CircularProgressIndicator();
                         if (i.status == MealsEnum.error_food_searching)
                           return Center(child: Text("급식을 찾을 수 가 없습니다."));
-                        return Consumer<SwiperProvider>(
-                          builder: (ctx, item, _) {
+                        return Consumer2<SwiperProvider, UserProvider>(
+                          builder: (ctx, item, userOption, _) {
                             double value = 0;
                             if (!i.meals.isEmpty(item.index))
                               value = double.parse(i.meals
@@ -134,6 +135,8 @@ class SchoolScreen extends StatelessWidget {
                               isAll: item.isShowAll,
                               key: item.isShowAll ? null : UniqueKey(),
                               value: value,
+                              humanHeight: userOption.height.toDouble(),
+                              humanGender: userOption.gender,
                             );
                           },
                         );
@@ -172,7 +175,8 @@ class SchoolScreen extends StatelessWidget {
                         child: CircularProgressIndicator(),
                       );
                     } else if (item.status == MealsEnum.error_food_searching) {
-                      return Center(child: Text("급식을 찾을 수 가 없습니다."));
+                      return Center(
+                          child: Text("급식을 찾을 수 가 없습니다.\n개발자에게 신고해주세요."));
                     }
                     return Swiper(
                       viewportFraction: 0.6,
@@ -187,14 +191,21 @@ class SchoolScreen extends StatelessWidget {
                         if ((vaild).abs() == 2) {
                           if (vaild > 0) {
                             // When go Breakfast to dinner, I should subtract 1 days.
+                            left++;
                             meal.time = meal.time.subtract(Duration(days: 1));
                           }
                           if (vaild < 0) {
                             // When go dinner to breakfast, I should add 1 days.
+                            right++;
                             meal.time = meal.time.add(Duration(days: 1));
                           }
                           //and update foods
-                          meal.loadingFood(provider.selectedSchool);
+                          print("Request Detected");
+                          print("TIME:  ${meal.time.day} ");
+                          meal.loadingFood(
+                              provider.selectedSchool, left, right);
+                          meal.sideLoading(
+                              provider.selectedSchool, left, right);
                         }
                       },
                       itemBuilder: (ctx, idx) {

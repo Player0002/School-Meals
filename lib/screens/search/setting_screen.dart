@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:school_food/constants/constants.dart';
 import 'package:school_food/provider/user_provider.dart';
@@ -26,59 +27,82 @@ class SettingScreen extends StatelessWidget {
                   padding: EdgeInsets.symmetric(
                     horizontal: getProportionateScreenWidth(20),
                   ),
-                  child: Column(
+                  child: Row(
                     children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            vertical: getProportionateScreenHeight(10)),
-                        child: Text("성별",
-                            style: defaultFont.copyWith(fontSize: 24)),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: AspectRatio(
-                              aspectRatio: 1,
-                              child: Card(
-                                child: Padding(
-                                  padding: EdgeInsets.all(
-                                      getProportionateScreenWidth(10)),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        color: Colors.black,
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () async {
+                            item.gender = Gender.MAN;
+                            item.saveData();
+                          },
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: Card(
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    getProportionateScreenWidth(10)),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      child: Icon(
+                                        FontAwesomeIcons.mars,
+                                        size: SizeConfig.screenWidth / 4,
+                                        color: item.gender == Gender.MAN
+                                            ? Colors.blue
+                                            : textColor.withOpacity(0.5),
                                       ),
-                                      Text("CARD"),
-                                    ],
-                                  ),
+                                    ),
+                                    Text(
+                                      "남",
+                                      style: defaultFont.copyWith(fontSize: 24),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
-                          Expanded(
-                            child: AspectRatio(
-                              aspectRatio: 1,
-                              child: Card(
-                                child: Padding(
-                                  padding: EdgeInsets.all(
-                                      getProportionateScreenWidth(10)),
-                                  child: Column(
-                                    children: [
-                                      Container(),
-                                      Text("CARD"),
-                                    ],
-                                  ),
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () async {
+                            item.gender = Gender.WOMAN;
+                            item.saveData();
+                          },
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: Card(
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    getProportionateScreenWidth(10)),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      child: Icon(
+                                        FontAwesomeIcons.venus,
+                                        size: SizeConfig.screenWidth / 4,
+                                        color: item.gender == Gender.WOMAN
+                                            ? Colors.pink
+                                            : textColor.withOpacity(0.5),
+                                      ),
+                                    ),
+                                    Text(
+                                      "여",
+                                      style: defaultFont.copyWith(fontSize: 24),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(
+                    vertical: getProportionateScreenHeight(10),
                     horizontal: getProportionateScreenWidth(20),
                   ),
                   child: Column(
@@ -108,8 +132,51 @@ class SettingScreen extends StatelessWidget {
                           initialIndex: item.age.toDouble(),
                           scrollDirection: Axis.horizontal,
                           dynamicItemSize: true,
-                          onItemFocus: (idx) {
+                          onItemFocus: (idx) async {
                             item.age = idx;
+                            await item.saveData();
+                          },
+                          itemSize: 75,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: getProportionateScreenHeight(10),
+                    horizontal: getProportionateScreenWidth(20),
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: getProportionateScreenHeight(10)),
+                        child: Text("키",
+                            style: defaultFont.copyWith(fontSize: 24)),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: getProportionateScreenHeight(60),
+                        child: ScrollSnapList(
+                          itemBuilder: (ctx, idx) => Container(
+                            width: 75,
+                            child: Center(
+                              child: Text(
+                                "$idx",
+                                style: idx == item.height
+                                    ? defaultFont.copyWith(fontSize: 24)
+                                    : defaultFont,
+                              ),
+                            ),
+                          ),
+                          itemCount: 200,
+                          initialIndex: item.height.toDouble(),
+                          scrollDirection: Axis.horizontal,
+                          dynamicItemSize: true,
+                          onItemFocus: (idx) async {
+                            item.height = idx;
+                            await item.saveData();
                           },
                           itemSize: 75,
                         ),
@@ -134,10 +201,19 @@ class SettingScreen extends StatelessWidget {
                         initialIndex: userOption.useSwiperNextDay ? 0 : 1,
                         onPress: (newIdx) {
                           userOption.useSwiperNextDay = newIdx == 0;
+                          userOption.saveData();
                         },
                       )
                     ],
                   ),
+                ),
+                FlatButton(
+                  onPressed: () {
+                    showLicensePage(
+                        context: context,
+                        applicationIcon: Image.asset("assets/Appicon.png"));
+                  },
+                  child: Text("오픈소스 라이센스", style: defaultFont),
                 )
               ],
             ),

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:school_food/constants/constants.dart';
 import 'package:school_food/provider/meals_provider.dart';
 import 'package:school_food/provider/swiper_provider.dart';
+import 'package:school_food/provider/user_provider.dart';
 import 'package:school_food/screens/search/components/bar_graph.dart';
 import 'package:school_food/services/sizeconfig.dart';
 
@@ -12,6 +13,7 @@ class InformationScreen extends StatelessWidget {
     SizeConfig().init(context);
     final titles = ["아침", "점심", "저녁"];
     final index = Provider.of<SwiperProvider>(context, listen: false);
+    final userOption = Provider.of<UserProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -51,9 +53,13 @@ class InformationScreen extends StatelessWidget {
                           height: getProportionateScreenHeight(320),
                           width: double.infinity,
                           child: BarGraphImage(
-                              key: UniqueKey(),
-                              height: getProportionateScreenHeight(260),
-                              meal: meal),
+                            key: UniqueKey(),
+                            height: getProportionateScreenHeight(260),
+                            meal: meal,
+                            humanAge: userOption.age,
+                            humanGender: userOption.gender,
+                            humanHeight: userOption.height.toDouble(),
+                          ),
                         ),
                         Padding(
                           padding: EdgeInsets.symmetric(
@@ -82,7 +88,7 @@ class InformationScreen extends StatelessWidget {
                     );
                   },
                 ),
-              )
+              ),
             ],
           ),
         ),

@@ -1,20 +1,49 @@
 import 'package:equatable/equatable.dart';
 
 class MealsModel {
+  final List<MealsSubModel> meals;
+
+  static MealsModel empty = MealsModel(meals: List.empty());
+
+  bool get isNotEmpty => meals.length > 0;
+  MealsModel({this.meals});
+  MealsSubModel getFromDate(DateTime time) {
+    if (meals != null)
+      for (MealsSubModel element in meals) {
+        if (element.date.year == time.year &&
+            element.date.month == time.month &&
+            element.date.day == time.day) return element;
+      }
+    return MealsSubModel.empty;
+  }
+
+  factory MealsModel.fromJson(Map<String, dynamic> json) {
+    return MealsModel(
+      meals: (json["result"] as List)
+          .map((e) => MealsSubModel.fromJson(e))
+          .toList(),
+    );
+  }
+}
+
+class MealsSubModel extends Equatable {
+  MealsSubModel({this.date, this.breakfast, this.lunch, this.dinner});
+
+  bool get isNotEmpty =>
+      breakfast != MealsDataModel.empty &&
+      lunch != MealsDataModel.empty &&
+      dinner != MealsDataModel.empty;
+
+  static MealsSubModel empty = MealsSubModel(
+    breakfast: MealsDataModel.empty,
+    lunch: MealsDataModel.empty,
+    dinner: MealsDataModel.empty,
+  );
+  final DateTime date;
   final MealsDataModel breakfast;
   final MealsDataModel lunch;
   final MealsDataModel dinner;
 
-  static MealsModel empty = MealsModel(
-      breakfast: MealsDataModel.empty,
-      lunch: MealsDataModel.empty,
-      dinner: MealsDataModel.empty);
-
-  MealsModel({this.breakfast, this.lunch, this.dinner});
-  bool get isNotEmpty =>
-      breakfast != MealsDataModel.empty ||
-      lunch != MealsDataModel.empty ||
-      dinner != MealsDataModel.empty;
   isEmpty(idx) {
     if (idx == 0)
       return breakfast.cal == null &&
@@ -34,11 +63,17 @@ class MealsModel {
     return null;
   }
 
-  factory MealsModel.fromJson(Map<String, dynamic> json) => MealsModel(
-        breakfast: MealsDataModel.fromJson(json["breakfast"]),
-        lunch: MealsDataModel.fromJson(json["lunch"]),
-        dinner: MealsDataModel.fromJson(json["dinner"]),
-      );
+  factory MealsSubModel.fromJson(Map<String, dynamic> json) {
+    int value = int.parse(json["date"]);
+    return MealsSubModel(
+      date: DateTime(value ~/ 10000, (value ~/ 100) % 100, value % 100),
+      breakfast: MealsDataModel.fromJson(json["breakfast"]),
+      lunch: MealsDataModel.fromJson(json["lunch"]),
+      dinner: MealsDataModel.fromJson(json["dinner"]),
+    );
+  }
+  @override
+  List<Object> get props => [breakfast, dinner, lunch];
 }
 
 class MealsDataModel extends Equatable {

@@ -15,7 +15,7 @@ class SearchScreen extends StatelessWidget {
     final topProvider = Provider.of<SchoolProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<MealsProvider>(context, listen: false)
-          .loadingFood(topProvider.selectedSchool);
+          .loadingFood(topProvider.selectedSchool, 0, 0);
     });
     return Scaffold(
       backgroundColor: Color(0xFFFAFAFA),

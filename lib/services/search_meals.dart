@@ -7,11 +7,11 @@ import 'package:school_food/model/school_model.dart';
 
 Future<MealsModel> findMeals(SchoolDataModel school, DateTime time) async {
   try {
+    print("$baseUrl/lotMeals?AD_CODE=${school.a_sc_code}&SC_CODE=${school.sc_code}&START=${(time.subtract(Duration(days: 1))).millisecondsSinceEpoch}&END=${(time.add(Duration(days: 1))).millisecondsSinceEpoch}");
     print(
-        "$baseUrl/meals?AD_CODE=${school.a_sc_code}&SC_CODE=${school.sc_code}&WHEN=${time.millisecondsSinceEpoch}");
-
+        "START : ${time.subtract(Duration(days: 1)).day} END : ${(time.add(Duration(days: 1))).day}");
     final response = await http.get(
-      "$baseUrl/meals?AD_CODE=${school.a_sc_code}&SC_CODE=${school.sc_code}&WHEN=${time.millisecondsSinceEpoch}",
+      "$baseUrl/lotMeals?AD_CODE=${school.a_sc_code}&SC_CODE=${school.sc_code}&START=${(time.subtract(Duration(days: 1))).millisecondsSinceEpoch}&END=${(time.add(Duration(days: 1))).millisecondsSinceEpoch}",
     );
     if (response.statusCode == 200) {
       return MealsModel.fromJson(json.decode(response.body));
