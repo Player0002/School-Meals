@@ -13,8 +13,14 @@ class BarGraphImage extends StatefulWidget {
   final double height;
   final Key key;
   final MealsDataModel meal;
+  final Color background;
   BarGraphImage(
-      {this.humanAge, this.humanGender, this.height, this.key, this.meal})
+      {this.humanAge,
+      this.humanGender,
+      this.height,
+      this.key,
+      this.meal,
+      this.background})
       : super(key: key);
   @override
   _BarGraphImageState createState() => _BarGraphImageState();
@@ -166,7 +172,8 @@ class _BarGraphImageState extends State<BarGraphImage>
           maxGi: (widget.humanAge <= 2 ? 35 : 30),
           maxDan: getDan(),
           height: widget.height,
-          fraction: fraction),
+          fraction: fraction,
+          background: widget.background),
     );
   }
 }
@@ -181,6 +188,7 @@ class BarGraph extends CustomPainter {
   final ui.Image first;
   final ui.Image second, third;
   final double fraction;
+  final Color background;
   BarGraph(
       {this.fraction,
       this.height,
@@ -192,7 +200,8 @@ class BarGraph extends CustomPainter {
       this.gi,
       this.maxTan,
       this.maxGi,
-      this.maxDan});
+      this.maxDan,
+      this.background});
   double rad(double angle) => pi / 180 * angle;
 
   @override
@@ -204,7 +213,7 @@ class BarGraph extends CustomPainter {
     final secondStick = Offset(size.width / 2, 0);
     final thirdStick = Offset(size.width - size.width / 4, 0).translate(10, 0);
     Paint paint = Paint()
-      ..color = Color(0xFFDFE5EB)
+      ..color = background == Colors.white ? Color(0xFFDFE5EB) : background
       ..strokeWidth = 1
       ..style = PaintingStyle.fill
       ..strokeCap = StrokeCap.square;

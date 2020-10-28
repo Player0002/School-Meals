@@ -18,10 +18,19 @@ class SearchScreen extends StatelessWidget {
           .loadingFood(topProvider.selectedSchool, 0, 0);
     });
     return Scaffold(
-      backgroundColor: Color(0xFFFAFAFA),
+      //backgroundColor: Color(0xFFFAFAFA),
       appBar: AppBar(
-        title: Text("학교 찾아보기"),
-        leading: Icon(Icons.arrow_back_ios),
+        title: Text(
+          "학교 찾아보기",
+          style: defaultFont.copyWith(fontSize: 24),
+        ),
+        leading: GestureDetector(
+          onTap: () => Navigator.pop(context),
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).iconTheme.color,
+          ),
+        ),
       ),
       body: Column(
         children: [
@@ -60,7 +69,7 @@ class SearchScreen extends StatelessWidget {
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Color(0xFFFAFAFA),
+                            color: Theme.of(context).backgroundColor,
                             borderRadius: BorderRadius.circular(15),
                             boxShadow: [
                               BoxShadow(
@@ -82,7 +91,12 @@ class SearchScreen extends StatelessWidget {
                                 SingleChildScrollView(
                                   child: Text(
                                     "${item.searchModel.models[idx].school_name}",
-                                    style: defaultFont.copyWith(fontSize: 16),
+                                    style: defaultFont.copyWith(
+                                        fontSize: 16,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .headline3
+                                            .color),
                                     maxLines: 1,
                                   ),
                                   scrollDirection: Axis.horizontal,
@@ -92,7 +106,12 @@ class SearchScreen extends StatelessWidget {
                                 ),
                                 Text(
                                   "${item.searchModel.models[idx].address}",
-                                  style: defaultFont.copyWith(fontSize: 12),
+                                  style: defaultFont.copyWith(
+                                      fontSize: 12,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .headline3
+                                          .color),
                                   maxLines: 1,
                                 ),
                               ],
@@ -142,7 +161,7 @@ class SearchBox extends StatelessWidget {
                     spreadRadius: 1,
                   ),
                 ],
-                color: Color(0xFFFAFAFA),
+                color: Theme.of(context).backgroundColor,
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -153,18 +172,22 @@ class SearchBox extends StatelessWidget {
                     Flexible(
                       child: TextField(
                         controller: textController,
-                        style: defaultFont,
+                        style: defaultFont.copyWith(
+                          color: Theme.of(context).textTheme.headline3.color,
+                        ),
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: "여기에 학교이름을 입력하세요.",
-                          hintStyle: defaultFont,
+                          hintStyle: defaultFont.copyWith(
+                            color: Theme.of(context).textTheme.headline3.color,
+                          ),
                         ),
                         onSubmitted: (text) => {onPress()},
                       ),
                     ),
                     Material(
                       elevation: 0,
-                      color: Color(0xFFFAFAFA),
+                      color: Theme.of(context).backgroundColor,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(360),
                         onTap: onPress,

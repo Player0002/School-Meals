@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
           iconTheme: IconThemeData(
             color: textColor,
           ),
+          backgroundColor: Colors.white,
           appBarTheme: AppBarTheme(
             elevation: 0,
             centerTitle: true,
@@ -60,7 +61,21 @@ class MyApp extends StatelessWidget {
               ),
             ),
           ),
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            foregroundColor: Color(0xFFFFFFFF),
+            backgroundColor: Colors.blueAccent,
+          ),
         ),
+        darkTheme: ThemeData.dark().copyWith(
+            primaryColor: Color(0xFF303030),
+            iconTheme: IconThemeData(
+              color: Color(0xFFA0A0A0),
+            ),
+            floatingActionButtonTheme: FloatingActionButtonThemeData(
+              splashColor: Color(0xFFFFFFFF),
+              backgroundColor: Colors.blueAccent.shade700,
+            ),
+            appBarTheme: AppBarTheme(elevation: 0, centerTitle: true)),
         home: Consumer<SchoolProvider>(
           builder: (ctx, item, _) {
             if (item.status == SchoolEnum.selecting) {

@@ -18,7 +18,10 @@ class InformationScreen extends StatelessWidget {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () => Navigator.pop(context),
-          child: Icon(Icons.arrow_back_ios),
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).iconTheme.color,
+          ),
         ),
       ),
       body: SafeArea(
@@ -54,6 +57,7 @@ class InformationScreen extends StatelessWidget {
                           width: double.infinity,
                           child: BarGraphImage(
                             key: UniqueKey(),
+                            background: Theme.of(context).backgroundColor,
                             height: getProportionateScreenHeight(260),
                             meal: meal,
                             humanAge: userOption.age,

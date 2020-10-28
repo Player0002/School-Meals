@@ -33,7 +33,10 @@ class SchoolScreen extends StatelessWidget {
         leading: GestureDetector(
           onTap: () => Navigator.push(
               context, MaterialPageRoute(builder: (ctx) => SearchScreen())),
-          child: Icon(Icons.arrow_back_ios),
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).iconTheme.color,
+          ),
         ),
         actions: [
           GestureDetector(
@@ -69,7 +72,10 @@ class SchoolScreen extends StatelessWidget {
             },
             child: Padding(
               padding: EdgeInsets.all(20),
-              child: Icon(Icons.calendar_today),
+              child: Icon(
+                Icons.calendar_today,
+                color: Theme.of(context).iconTheme.color,
+              ),
             ),
           )
         ],
@@ -83,8 +89,12 @@ class SchoolScreen extends StatelessWidget {
             ),
           ).then((value) => userOption.saveData());
         },
-        child: Icon(Icons.settings),
-        backgroundColor: Colors.blueAccent,
+        child: Icon(
+          Icons.settings,
+          color: Theme.of(context).floatingActionButtonTheme.foregroundColor,
+        ),
+        backgroundColor:
+            Theme.of(context).floatingActionButtonTheme.backgroundColor,
       ),
       body: SingleChildScrollView(
         child: SizedBox(
@@ -99,7 +109,9 @@ class SchoolScreen extends StatelessWidget {
                 child: Text(
                   "${provider.selectedSchool.school_name}",
                   maxLines: 1,
-                  style: defaultFont.copyWith(fontSize: 24),
+                  style: defaultFont.copyWith(
+                      fontSize: 24,
+                      color: Theme.of(context).textTheme.headline3.color),
                 ),
               ),
               Padding(
@@ -108,7 +120,8 @@ class SchoolScreen extends StatelessWidget {
                 child: Consumer<MealsProvider>(
                   builder: (ctx, item, _) => Text(
                     "${item.time.year}년 ${item.time.month}월 ${item.time.day}일 [ ${weeks[item.time.weekday - 1]} ]",
-                    style: defaultFont,
+                    style: defaultFont.copyWith(
+                        color: Theme.of(context).textTheme.headline3.color),
                   ),
                 ),
               ),
@@ -230,7 +243,7 @@ class SchoolScreen extends StatelessWidget {
                             vertical: getProportionateScreenHeight(20),
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Theme.of(context).backgroundColor,
                             borderRadius: BorderRadius.circular(15),
                             boxShadow: [
                               BoxShadow(
@@ -249,7 +262,10 @@ class SchoolScreen extends StatelessWidget {
                                     titles[idx],
                                     style: defaultFont.copyWith(
                                       fontSize: 24,
-                                      color: Colors.black,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .headline1
+                                          .color,
                                     ),
                                   ),
                                 ),
@@ -268,7 +284,12 @@ class SchoolScreen extends StatelessWidget {
                                             child: Text(
                                           meal.lists[index],
                                           style: defaultFont.copyWith(
-                                              fontSize: 16),
+                                            fontSize: 16,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .headline1
+                                                .color,
+                                          ),
                                         )),
                                         itemCount: meal.lists.length,
                                       ),
