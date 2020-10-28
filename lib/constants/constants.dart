@@ -11,7 +11,7 @@ const kGender = "KEY_GENDER";
 const kAge = "KEY_AGE";
 const kUseSwiper = "KEY_USE_SWIPER";
 const kUseMaterial = "KEY_USE_MATERIAL";
-
+const kUserTheme = "KEY_USER_THEME";
 const baseUrl = "https://kyj-school-server.herokuapp.com";
 
 const textColor = Color(0xFF707070);
