@@ -34,7 +34,7 @@ dependencies:
   shared_preferences: ^0.5.10
   google_fonts: ^1.1.0
   flutter_swiper: ^1.1.6
-  flutter_datetime_picker: ^1.4.0
+  flutter_datetime_picker: ^1.5.0
   scroll_snap_list: ^0.4.1
   font_awesome_flutter: ^8.4.0
 dev_dependencies:

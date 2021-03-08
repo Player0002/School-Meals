@@ -7,13 +7,16 @@ import 'package:school_food/model/school_model.dart';
 
 Future<MealsModel> findMeals(SchoolDataModel school, DateTime time) async {
   try {
-    print("$baseUrl/lotMeals?AD_CODE=${school.a_sc_code}&SC_CODE=${school.sc_code}&START=${(time.subtract(Duration(days: 1))).millisecondsSinceEpoch}&END=${(time.add(Duration(days: 1))).millisecondsSinceEpoch}");
+    final subTime = time.subtract(Duration(days: 1));
+    final extTime = time.add(Duration(days: 1));
+    final fixedUrl =
+        "$baseUrl/lotMeals?AD_CODE=${school.a_sc_code}&SC_CODE=${school.sc_code}&START=${subTime.millisecondsSinceEpoch}&END=${extTime.millisecondsSinceEpoch}";
+    print(fixedUrl);
     print(
-        "START : ${time.subtract(Duration(days: 1)).day} END : ${(time.add(Duration(days: 1))).day}");
-    final response = await http.get(
-      "$baseUrl/lotMeals?AD_CODE=${school.a_sc_code}&SC_CODE=${school.sc_code}&START=${(time.subtract(Duration(days: 1))).millisecondsSinceEpoch}&END=${(time.add(Duration(days: 1))).millisecondsSinceEpoch}",
-    );
+        "START : ${time.subtract(Duration(days: 1))} END : ${(time.add(Duration(days: 1)))}");
+    final response = await http.get(fixedUrl);
     if (response.statusCode == 200) {
+      print(response.body);
       return MealsModel.fromJson(json.decode(response.body));
     } else {
       return MealsModel.empty;

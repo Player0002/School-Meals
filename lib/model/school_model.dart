@@ -43,6 +43,7 @@ class SchoolDataModel extends Equatable {
     this.sc_code,
     this.address,
   });
+
   factory SchoolDataModel.fromJson(Map<String, dynamic> json) =>
       SchoolDataModel(
         sc_code: json["sc_code"],

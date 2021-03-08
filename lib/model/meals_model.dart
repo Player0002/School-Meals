@@ -6,7 +6,9 @@ class MealsModel {
   static MealsModel empty = MealsModel(meals: List.empty());
 
   bool get isNotEmpty => meals.length > 0;
+
   MealsModel({this.meals});
+
   MealsSubModel getFromDate(DateTime time) {
     if (meals != null)
       for (MealsSubModel element in meals) {
@@ -72,6 +74,7 @@ class MealsSubModel extends Equatable {
       dinner: MealsDataModel.fromJson(json["dinner"]),
     );
   }
+
   @override
   List<Object> get props => [breakfast, dinner, lunch];
 }
@@ -82,9 +85,13 @@ class MealsDataModel extends Equatable {
   final List<String> lists;
   final String cal;
   final List<String> NTR;
+
   MealsDataModel({this.lists, this.cal, this.NTR});
+
   static MealsDataModel empty =
       MealsDataModel(lists: null, cal: null, NTR: null);
+  static MealsDataModel loading =
+      MealsDataModel(lists: ["급식을 불러오는 중입니다"], cal: null, NTR: null);
 
   factory MealsDataModel.fromJson(Map<String, dynamic> json) => json == null
       ? empty
