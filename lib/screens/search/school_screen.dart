@@ -17,7 +17,8 @@ import 'package:school_food/services/sizeconfig.dart';
 class SchoolScreen extends StatelessWidget {
   final weeks = ['월', '화', '수', '목', '금', '토', "일"];
   int right = 0, left = 0;
-
+  final swiperController = SwiperController();
+  final scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -197,35 +198,12 @@ class SchoolScreen extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 height: getProportionateScreenHeight(300),
-                child: Consumer<MealsProvider>(
-                  builder: (ctx, item, _) {
-                    final meals = item.meals;
-                    if (item.status == MealsEnum.food_searching) {
-                      return Swiper(
-                        viewportFraction: 0.6,
-                        scale: 0.8,
-                        itemCount: 3,
-                        physics: NeverScrollableScrollPhysics(),
-                        index: 0,
-                        itemBuilder: (ctx, idx) => buildContainer(
-                          context,
-                          titles,
-                          0,
-                          MealsSubModel(
-                            date: DateTime.now(),
-                            breakfast: MealsDataModel.loading,
-                            lunch: MealsDataModel.loading,
-                            dinner: MealsDataModel.loading,
-                          ),
-                        ),
-                      );
-                    } else if (item.status == MealsEnum.error_food_searching) {
-                      return Center(
-                          child: Text("급식을 찾을 수 가 없습니다.\n개발자에게 신고해주세요."));
-                    }
-                    return Swiper(
+                child: Consumer<MealsProvider>(builder: (ctx, item, _) {
+                  final meals = item.meals;
+                  return Swiper(
                       viewportFraction: 0.6,
                       scale: 0.8,
+                      controller: swiperController,
                       itemCount: 3,
                       index: swiper_provider.index,
                       onIndexChanged: (index) {
@@ -253,11 +231,33 @@ class SchoolScreen extends StatelessWidget {
                         }
                       },
                       itemBuilder: (ctx, idx) {
+                        if (item.status == MealsEnum.food_searching)
+                          return buildContainer(
+                            context,
+                            titles,
+                            0,
+                            MealsSubModel(
+                              date: DateTime.now(),
+                              breakfast: MealsDataModel.loading,
+                              lunch: MealsDataModel.loading,
+                              dinner: MealsDataModel.loading,
+                            ),
+                          );
+                        if (item.status == MealsEnum.error_food_searching)
+                          return buildContainer(
+                              context,
+                              titles,
+                              0,
+                              MealsSubModel(
+                                  breakfast: MealsDataModel(
+                                      cal: null,
+                                      lists: ["급식을 찾을 수 없습니다."],
+                                      NTR: null),
+                                  lunch: MealsDataModel.loading,
+                                  dinner: MealsDataModel.loading));
                         return buildContainer(context, titles, idx, meals);
-                      },
-                    );
-                  },
-                ),
+                      });
+                }),
               )
             ],
           ),
@@ -307,6 +307,7 @@ class SchoolScreen extends StatelessWidget {
                 return SizedBox(
                   height: getProportionateScreenHeight(200),
                   child: ListView.builder(
+                    controller: scrollController,
                     itemBuilder: (_, index) => Center(
                         child: Text(
                       meal.lists[index],
